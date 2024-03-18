@@ -1,0 +1,7 @@
+// Scaffolding file for testing parser initialization
+// Specifically comment and white space stripping
+
+valid command 1         // Inline comment
+valid command 2  
+another valid command 0 // Inline comment
+end

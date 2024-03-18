@@ -1,0 +1,6 @@
+// Scaffolding file for testing parser behavior
+
+push constant 7
+push constant 8
+add
+invalid command 0 // Inline comment
