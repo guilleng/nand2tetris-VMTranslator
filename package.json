@@ -4,7 +4,8 @@
   "description": "VM Translator -- The Elements of Computer Systems",
   "main": "VMTranslator.js",
   "scripts": {
-    "test": "mocha --require ts-node/register test/**/*.ts"
+    "test": "mocha --require ts-node/register test/**/*.ts && ./test/compare.sh",
+    "compare": "./test/compare.sh"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.3",
