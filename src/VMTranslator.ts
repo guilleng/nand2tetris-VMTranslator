@@ -31,16 +31,22 @@ async function translateVMFile(vmFile: string, writer: CodeWriter) {
       await writer.writePushPop(c, parser.arg1(), parser.arg2());
       break;
     case "C_LABEL":
+      await writer.writeLabel(parser.arg1());
       break;
     case "C_GOTO":
+      await writer.writeGoto(parser.arg1());
       break;
     case "C_IF":
+      await writer.writeIf(parser.arg1());
       break;
     case "C_FUNCTION":
+      await writer.writeFunction(parser.arg1(), parser.arg2());
       break;
     case "C_CALL":
+      await writer.writeCall(parser.arg1(), parser.arg2());
       break;
     case "C_RETURN":
+      await writer.writeReturn();
       break;
     }
     parser.advance();
@@ -66,7 +72,24 @@ async function main(argument: string):Promise<void> {
     await translateVMFile(argument, writer);
 
   } else if (stat.isDirectory()) {
-    
+    await fsPromises.access(argument, fsPromises.constants.W_OK);
+
+    const outputFile = path.join(argument, path.basename(argument) + ASM_EXT);
+    const dirFiles = await fsPromises.readdir(argument);
+    const vmFiles = dirFiles.filter((file) => isVMExtension(file));
+
+    if (vmFiles.length === 0) {
+      throw new Error(`No vm files in ${argument}`);
+    }
+
+    const writer = new CodeWriter(outputFile);
+    await writer.writeInit();
+
+    for (const file of vmFiles) {
+
+      writer.setFileName(file);
+      await translateVMFile(argument + file, writer);
+    }
   } else {
     throw new Error(`The file ${argument} does not have a vm extension`);
   }

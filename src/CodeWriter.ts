@@ -4,6 +4,8 @@ import * as os from 'os';
 import { CommandType } from './Parser';
 import { StackArithmetic } from './translations/StackArithmetic';
 import { MemoryAccess } from './translations/MemoryAccess';
+import { ProgramFlow } from './translations/ProgramFlow';
+import { FunctionCalls } from './translations/FunctionCalls';
 
 async function writeCode(filePath: string, data: string):Promise<void> {
     fsPromises.appendFile(filePath, data, 'ascii');
@@ -27,6 +29,49 @@ export class CodeWriter {
     this.fileName = fileName;
   }
 
+  public async writeInit() {
+
+    const asmCode = `      @256
+      D=A
+      @SP
+      M=D
+      ` + FunctionCalls.call("Sys.init", 0, 0);
+      
+    await writeCode(this.filePath, asmCode);
+  }
+
+  public async writeLabel(label: string) {
+    const asmCode = ProgramFlow.label(label, this.fileName);
+    await writeCode(this.filePath, asmCode);
+  }
+
+  public async writeGoto(label: string) {
+    const asmCode = ProgramFlow.goto(label, this.fileName);
+    await writeCode(this.filePath, asmCode);
+  }
+
+  public async writeIf(label: string) {
+    const asmCode = ProgramFlow.if(label, this.fileName);
+    await writeCode(this.filePath, asmCode);
+  }
+  
+  public async writeCall(functionName: string, numArgs: number) {
+    this.callCount += 1;
+
+    const asmCode = FunctionCalls.call(functionName, numArgs, this.callCount);
+    await writeCode(this.filePath, asmCode);
+  }
+
+  public async writeReturn() {
+    const asmCode = FunctionCalls.wreturn();
+    await writeCode(this.filePath, asmCode);
+  }
+
+  public async writeFunction(functionName: string, numLocals: number) {
+    const asmCode = FunctionCalls.function(functionName, numLocals);
+    await writeCode(this.filePath, asmCode);
+  }
+	
   public async writeArithmetic(command: string) {
     let asmCode: string;
 

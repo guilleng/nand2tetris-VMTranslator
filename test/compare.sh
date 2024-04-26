@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 # Assumes CPUEmulator is on $PATH.
 # Translates all supplied .vm files into assembler. 
@@ -74,6 +74,85 @@ translate_and_compare() {
   else
     echo "Passed test: $(basename -s .tst "$StaticTest")"
     rm "$StaticTest".asm
+  fi 
+
+
+  # Stage 3 ####################################################################
+  
+  node dist/VMTranslator.js "$BasicLoop".vm
+  CPUEmulator "$BasicLoop".tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$BasicLoop")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$BasicLoop")"
+    rm "$BasicLoop".asm
+  fi 
+
+  node dist/VMTranslator.js "$FibonacciSeries".vm
+  CPUEmulator "$FibonacciSeries".tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$FibonacciSeries")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$FibonacciSeries")"
+    rm "$FibonacciSeries".asm
+  fi 
+
+
+  # Stage 4 ####################################################################
+  
+  node dist/VMTranslator.js "$NestedCall".vm
+  CPUEmulator "$NestedCall".tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$NestedCall")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$NestedCall")"
+    rm "$NestedCall".asm
+  fi 
+
+  node dist/VMTranslator.js "$SimpleFunction".vm
+  CPUEmulator "$SimpleFunction".tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$SimpleFunction")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$SimpleFunction")"
+    rm "$SimpleFunction".asm
+  fi 
+
+
+  # Stage 4 - Bootstrap ########################################################
+   
+  node dist/VMTranslator.js "$FibonacciElement"
+  CPUEmulator "$FibonacciElement"FibonacciElement.tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$FibonacciElement")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$FibonacciElement")"
+    rm "$FibonacciElement"FibonacciElement.asm
+  fi 
+  
+  node dist/VMTranslator.js "$NestedCallBst"
+  CPUEmulator "$NestedCallBst"NestedCall.tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$NestedCallBst")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$NestedCallBst")"
+    rm "$NestedCallBst"NestedCall.asm
+  fi 
+
+  node dist/VMTranslator.js "$StaticsTest"
+  CPUEmulator "$StaticsTest"StaticsTest.tst > /dev/null 2>&1
+  if [ ! $? -eq 0 ]; then                                                 
+    echo "Failed test: $(basename -s .tst "$StaticsTest")"
+    exit 1
+  else
+    echo "Passed test: $(basename -s .tst "$StaticsTest")"
+    rm "$StaticsTest"StaticsTest.asm
   fi 
 }
 
