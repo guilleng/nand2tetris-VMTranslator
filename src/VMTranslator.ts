@@ -54,7 +54,7 @@ async function translateVMFile(vmFile: string, writer: CodeWriter) {
 }
 
 /*
- * Main program:
+ * Main entry point.
  */
 async function main(argument: string):Promise<void> {
 

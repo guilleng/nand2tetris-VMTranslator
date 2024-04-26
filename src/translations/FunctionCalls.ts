@@ -1,7 +1,7 @@
 import { StackArithmetic } from './StackArithmetic'
 
 /*
- * Returns asm code resulting of the `PUSH 0` operation `numLocals` times.
+ * Returns the asm code that yields the `PUSH 0` operation `numLocals` times.
  */
 const pushLocals = (numLocals: number): string => {
   let pushedLocals = "";
@@ -13,7 +13,7 @@ const pushLocals = (numLocals: number): string => {
 }
 
 /*
- * Implementations follows the protocols described in Chapter 8, figure 8.5.
+ * Implementations follow the protocols described in Chapter 8, figure 8.5.
  */
 export const FunctionCalls = {
 

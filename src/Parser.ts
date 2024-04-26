@@ -22,7 +22,7 @@ export class Parser {
   }
 
   /* 
-   * Getter methods used in unit tests
+   * Getter methods, used in unit tests
    */
   get allCode() { return this.code; }
   get currentLine() { return this.code[this.position]; }

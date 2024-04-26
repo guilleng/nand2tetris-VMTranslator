@@ -31,6 +31,7 @@ export const MemoryAccess = {
   @SP
   M=M+1
 `),
+
 	/*
 	 * Popping `LCL`, `ARG`, `THIS` and `THAT` instructions:
 	 *
@@ -53,6 +54,7 @@ export const MemoryAccess = {
 	A=M
 	M=D
 `),
+
   /*
    * Translating both pop/push `POINTER 0/1` and `TEMP + i` is done by
    * referencing to the specific RAM address according to implementation.  
@@ -67,6 +69,7 @@ export const MemoryAccess = {
   @SP
   M=M+1
 `),
+
   popRegister: (segment: string, index: number):string => (
     `// pop ${segment} ${index}
   @SP
@@ -77,6 +80,7 @@ export const MemoryAccess = {
   @R${index + basis(segment)}
   M=D
 `),
+
 	/*
 	 * Static pushing/popping translation is straightforward.  
 	 */
@@ -90,6 +94,7 @@ export const MemoryAccess = {
 	@${fileName}.${index}
 	M=D
 `),
+
   pushStatic: (index: number, fileName: string):string => (
     `// push static ${index}
 	@${fileName}.${index}
